@@ -1,7 +1,7 @@
 # Purpose
 Do Android Tutorial RunTracker.
 
-# References:
+# References
 
 ## book "Android Programming", The Big Nerd Ranch Guide
 authors Bill Phillips, Brian Hardy
