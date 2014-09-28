@@ -133,7 +133,7 @@ public class RunFragment extends Fragment {
         mDurationTextView.setText(Run.formatDuration(durationSeconds));
 
         mStartButton.setEnabled(!started);
-        mStartButton.setEnabled(started);
+        mStopButton.setEnabled(started);
     }
 
 }
