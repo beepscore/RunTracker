@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.location.Location;
 
 /**
  * Created by stevebaker on 9/28/14.
@@ -15,6 +16,14 @@ public class RunDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String TABLE_RUN = "run";
     private static final String COLUMN_RUN_START_DATE = "start_date";
+
+    private static final String TABLE_LOCATION = "location";
+    private static final String COLUMN_LOCATION_LATITUDE = "latitude";
+    private static final String COLUMN_LOCATION_LONGITUDE = "longitude";
+    private static final String COLUMN_LOCATION_ALTITUDE = "altitude";
+    private static final String COLUMN_LOCATION_TIMESTAMP = "timestamp";
+    private static final String COLUMN_LOCATION_PROVIDER = "provider";
+    private static final String COLUMN_LOCATION_RUN_ID = "run_id";
 
     public RunDatabaseHelper(Context context) {
         super(context, DB_NAME, null, VERSION);
@@ -44,6 +53,21 @@ public class RunDatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_RUN_START_DATE, run.getStartDate().getTime());
         // CursorFactory argument null
         return getWritableDatabase().insert(TABLE_RUN, null, contentValues);
+    }
+
+    /**
+     * @return location id
+     */
+    public long insertLocation(long runId, Location location) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_LOCATION_LATITUDE, location.getLatitude());
+        contentValues.put(COLUMN_LOCATION_LONGITUDE, location.getLongitude());
+        contentValues.put(COLUMN_LOCATION_ALTITUDE, location.getAltitude());
+        contentValues.put(COLUMN_LOCATION_TIMESTAMP, location.getTime());
+        contentValues.put(COLUMN_LOCATION_PROVIDER, location.getProvider());
+        contentValues.put(COLUMN_LOCATION_RUN_ID, runId);
+        // CursorFactory argument null
+        return getWritableDatabase().insert(TABLE_LOCATION, null, contentValues);
     }
 
 }
