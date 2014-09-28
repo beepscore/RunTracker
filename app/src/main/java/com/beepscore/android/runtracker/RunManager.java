@@ -3,6 +3,7 @@ package com.beepscore.android.runtracker;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.location.LocationManager;
 
 /**
@@ -42,9 +43,23 @@ public class RunManager {
     public void startLocationUpdates() {
         String provider = LocationManager.GPS_PROVIDER;
 
+        // Get the last known location and broadcast it if you have one
+        Location lastKnown = mLocationManager.getLastKnownLocation(provider);
+        if (lastKnown != null) {
+            // Reset the time to now
+            lastKnown.setTime(System.currentTimeMillis());
+            broadcastLocation(lastKnown);
+        }
+
         // Start updates from the location manager
         PendingIntent pendingIntent = getLocationPendingIntent(true);
         mLocationManager.requestLocationUpdates(provider, 0, 0, pendingIntent);
+    }
+
+    private void broadcastLocation(Location location) {
+        Intent broadcast = new Intent(ACTION_LOCATION);
+        broadcast.putExtra(LocationManager.KEY_LOCATION_CHANGED, location);
+        mAppContext.sendBroadcast(broadcast);
     }
 
     public void stopLocationUpdates() {
