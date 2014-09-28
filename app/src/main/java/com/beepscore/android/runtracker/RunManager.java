@@ -122,4 +122,12 @@ public class RunManager {
         return run;
     }
 
+    private void insertLocation(Location location) {
+        if (mCurrentRunId != -1) {
+            mDatabaseHelper.insertLocation(mCurrentRunId, location);
+        } else {
+            Log.e(TAG, "Location received with no tracking run; ignoring.");
+        }
+    }
+
 }
