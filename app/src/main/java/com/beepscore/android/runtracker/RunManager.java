@@ -122,7 +122,7 @@ public class RunManager {
         return run;
     }
 
-    private void insertLocation(Location location) {
+    public void insertLocation(Location location) {
         if (mCurrentRunId != -1) {
             mDatabaseHelper.insertLocation(mCurrentRunId, location);
         } else {
