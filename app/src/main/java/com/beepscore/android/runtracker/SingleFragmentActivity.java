@@ -4,31 +4,29 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.widget.FrameLayout;
 
 /**
  * Created by stevebaker on 8/10/14.
  */
 
 public abstract class SingleFragmentActivity extends FragmentActivity {
-    protected static final String FRAGMENT_TAG = "SingleFragmentActivity.Fragment";
 
     protected abstract Fragment createFragment();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_fragment);
 
-        FrameLayout fl = new FrameLayout(this);
-        fl.setId(R.id.fragmentContainer);
-        setContentView(fl);
-
-        FragmentManager manager = getSupportFragmentManager();
-        Fragment fragment = manager.findFragmentById(R.id.fragmentContainer);
+        // FragmentManager manages a list of fragments and a backStack of fragment transactions
+        // http://developer.android.com/reference/android/app/FragmentManager.html
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
 
         if (fragment == null) {
             fragment = createFragment();
-            manager.beginTransaction()
+            fm.beginTransaction()
+                    // use fragment factory method newInstance
                     .add(R.id.fragmentContainer, fragment)
                     .commit();
         }
