@@ -3,7 +3,7 @@
     package="com.beepscore.android.runtracker" >
 
     <uses-permission android:required="true" android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-feature android:name="android:hardware.location.gps" />
+    <uses-feature android:name="android.hardware.location.gps" />
 
     <application
         android:allowBackup="true"
