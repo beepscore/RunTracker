@@ -25,10 +25,11 @@ public class Run {
     }
 
     public static String formatDuration(int durationSeconds) {
+        // http://forums.bignerdranch.com/viewtopic.php?f=430&t=7659
+        int hours = (durationSeconds / 3600);
+        int minutes = (durationSeconds / 60) % 60;
         int seconds = durationSeconds % 60;
-        int minutes = ((durationSeconds - seconds) / 60) % 60;
-        int hours = (durationSeconds - (minutes * 60) - seconds) / 3600;
-        return String.format("%02d:%02d:%02d", hours, minutes,seconds);
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 
 }
