@@ -72,7 +72,8 @@ public class RunManager {
 
         // Start updates from the location manager
         PendingIntent pendingIntent = getLocationPendingIntent(true);
-        mLocationManager.requestLocationUpdates(provider, 0, 0, pendingIntent);
+        long MIN_TIME = 10000;
+        mLocationManager.requestLocationUpdates(provider, MIN_TIME, 0, pendingIntent);
     }
 
     private void broadcastLocation(Location location) {
