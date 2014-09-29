@@ -96,6 +96,10 @@ public class RunManager {
         return getLocationPendingIntent(false) != null;
     }
 
+    public boolean isTrackingRun(Run run) {
+        return ((run != null) && (run.getId() == mCurrentRunId));
+    }
+
     public Run startNewRun() {
         // Insert a run into the db
         Run run = insertRun();
@@ -127,6 +131,19 @@ public class RunManager {
 
     public RunCursor queryRuns() {
         return mDatabaseHelper.queryRuns();
+    }
+
+    public Run getRun(long id) {
+        Run run = null;
+        RunCursor cursor = mDatabaseHelper.queryRun(id);
+        cursor.moveToFirst();
+        // if we got a row, get a run
+        if (!cursor.isAfterLast()) {
+            run = cursor.getRun();
+        }
+        // close releases memory used by cursor
+        cursor.close();
+        return run;
     }
 
     public void insertLocation(Location location) {
