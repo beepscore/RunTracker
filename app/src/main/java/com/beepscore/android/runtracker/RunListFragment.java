@@ -1,10 +1,14 @@
 package com.beepscore.android.runtracker;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v4.app.ListFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
@@ -16,12 +20,14 @@ import com.beepscore.android.runtracker.RunDatabaseHelper.RunCursor;
  * Created by stevebaker on 9/28/14.
  */
 public class RunListFragment extends ListFragment {
+    private static final int REQUEST_NEW_RUN = 0;
 
     private RunCursor mCursor;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
         // FIXME: This simple implementation blocks the main thread
         // TODO: Instead use a Loader to load in background
@@ -37,6 +43,34 @@ public class RunListFragment extends ListFragment {
     public void onDestroy() {
         mCursor.close();
         super.onDestroy();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.run_list_options, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_new_run:
+                Intent intent = new Intent(getActivity(), RunActivity.class);
+                startActivityForResult(intent, REQUEST_NEW_RUN);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (REQUEST_NEW_RUN == requestCode) {
+            // if user navigates back to this activity, force list to reload
+            // FIXME: Don't requery on main thread, use Loader instead
+            mCursor.requery();
+            ((RunCursorAdapter)getListAdapter()).notifyDataSetChanged();
+        }
     }
 
     private static class RunCursorAdapter extends CursorAdapter {
