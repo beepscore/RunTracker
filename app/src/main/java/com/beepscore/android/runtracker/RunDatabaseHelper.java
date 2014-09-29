@@ -127,4 +127,28 @@ public class RunDatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    public static class LocationCursor extends CursorWrapper {
+
+        public LocationCursor(Cursor cursor) {
+            super(cursor);
+        }
+
+        public Location getLocation() {
+            if (isBeforeFirst() || isAfterLast()) {
+                return null;
+            }
+            // First get the provider
+            String provider = getString(getColumnIndex(COLUMN_LOCATION_PROVIDER));
+            // Use provider to instantiate location
+            Location location = new Location(provider);
+            // Populate the remaining properties
+            location.setLongitude(getDouble(getColumnIndex(COLUMN_LOCATION_LONGITUDE)));
+            location.setLatitude(getDouble(getColumnIndex(COLUMN_LOCATION_LATITUDE)));
+            location.setAltitude(getDouble(getColumnIndex(COLUMN_LOCATION_ALTITUDE)));
+            location.setTime(getLong(getColumnIndex(COLUMN_LOCATION_TIMESTAMP)));
+            return location;
+        }
+
+    }
+
 }
