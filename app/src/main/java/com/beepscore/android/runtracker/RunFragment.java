@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 
 public class RunFragment extends Fragment {
+    private static final String TAG = "RunFragment";
+    private static final String ARG_RUN_ID = "RUN_ID";
 
     private RunManager mRunManager;
 
@@ -51,8 +53,11 @@ public class RunFragment extends Fragment {
      *
      * @return A new instance of fragment RunFragment.
      */
-    public static RunFragment newInstance() {
+    public static RunFragment newInstance(long runId) {
+        Bundle args = new Bundle();
+        args.putLong(ARG_RUN_ID, runId);
         RunFragment fragment = new RunFragment();
+        fragment.setArguments(args);
         return fragment;
     }
 
