@@ -26,6 +26,9 @@ public class RunFragment extends Fragment {
     private BroadcastReceiver mLocationReceiver = new LocationReceiver() {
         @Override
         protected void onLocationReceived(Context context, Location location) {
+            if (!mRunManager.isTrackingRun(mRun)) {
+                return;
+            }
             mLastLocation = location;
             if (isVisible()) {
                 updateUI();
