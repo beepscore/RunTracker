@@ -98,7 +98,11 @@ public class RunFragment extends Fragment {
         mStartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mRun = mRunManager.startNewRun();
+                if (mRun == null) {
+                    mRun = mRunManager.startNewRun();
+                } else {
+                    mRun = mRunManager.startTrackingRun(mRun);
+                }
                 updateUI();
             }
         });
