@@ -101,7 +101,7 @@ public class RunFragment extends Fragment {
                 if (mRun == null) {
                     mRun = mRunManager.startNewRun();
                 } else {
-                    mRun = mRunManager.startTrackingRun(mRun);
+                    mRunManager.startTrackingRun(mRun);
                 }
                 updateUI();
             }
@@ -136,6 +136,7 @@ public class RunFragment extends Fragment {
 
     private void updateUI() {
         boolean started = mRunManager.isTrackingRun();
+        boolean trackingThisRun = mRunManager.isTrackingRun(mRun);
 
         if (mRun != null) {
             mStartedTextView.setText(mRun.getStartDate().toString());
@@ -152,7 +153,7 @@ public class RunFragment extends Fragment {
         mDurationTextView.setText(Run.formatDuration(durationSeconds));
 
         mStartButton.setEnabled(!started);
-        mStopButton.setEnabled(started);
+        mStopButton.setEnabled(started && trackingThisRun);
     }
 
 }
