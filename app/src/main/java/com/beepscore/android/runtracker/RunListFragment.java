@@ -1,10 +1,13 @@
 package com.beepscore.android.runtracker;
 
+import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.v4.app.ListFragment;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.os.Bundle;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,7 +23,7 @@ import com.beepscore.android.runtracker.RunDatabaseHelper.RunCursor;
 /**
  * Created by stevebaker on 9/28/14.
  */
-public class RunListFragment extends ListFragment {
+public class RunListFragment extends ListFragment implements LoaderCallbacks<Cursor> {
     private static final int REQUEST_NEW_RUN = 0;
 
     private RunCursor mCursor;
@@ -82,6 +85,28 @@ public class RunListFragment extends ListFragment {
         intent.putExtra(RunActivity.EXTRA_RUN_ID, id);
         startActivity(intent);
     }
+
+    // Loader callbacks
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        // we only ever load the runs, so assume this is the case
+        return new RunListCursorLoader(getActivity());
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        // create an adapter to point at this cursor
+        RunCursorAdapter adapter = new RunCursorAdapter(getActivity(), (RunCursor)cursor);
+        setListAdapter(adapter);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        // stop using the cursor (via the adapter)
+        setListAdapter(null);
+    }
+
+    ////
 
     private static class RunListCursorLoader extends SQLiteCursorLoader {
 
