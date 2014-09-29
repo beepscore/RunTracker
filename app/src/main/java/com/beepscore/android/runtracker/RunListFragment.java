@@ -26,27 +26,12 @@ import com.beepscore.android.runtracker.RunDatabaseHelper.RunCursor;
 public class RunListFragment extends ListFragment implements LoaderCallbacks<Cursor> {
     private static final int REQUEST_NEW_RUN = 0;
 
-    private RunCursor mCursor;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
-        // FIXME: This simple implementation blocks the main thread
-        // TODO: Instead use a Loader to load in background
-        // Query the list of runs
-        mCursor = RunManager.get(getActivity()).queryRuns();
-
-        // Create an adapter to point at this cursor
-        RunCursorAdapter adapter = new RunCursorAdapter(getActivity(), mCursor);
-        setListAdapter(adapter);
-    }
-
-    @Override
-    public void onDestroy() {
-        mCursor.close();
-        super.onDestroy();
+        // initialize the loader to load the list of runs
+        getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
@@ -70,10 +55,8 @@ public class RunListFragment extends ListFragment implements LoaderCallbacks<Cur
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (REQUEST_NEW_RUN == requestCode) {
-            // if user navigates back to this activity, force list to reload
-            // FIXME: Don't requery on main thread, use Loader instead
-            mCursor.requery();
-            ((RunCursorAdapter)getListAdapter()).notifyDataSetChanged();
+            // Restart the loader to get any new run available
+            getLoaderManager().restartLoader(0, null, this);
         }
     }
 
