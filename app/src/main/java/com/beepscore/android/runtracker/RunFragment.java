@@ -73,6 +73,14 @@ public class RunFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         mRunManager = RunManager.get(getActivity());
+        // Check for a Run ID as an argument, and find the run
+        Bundle args = getArguments();
+        if (args != null) {
+            long runId = args.getLong(ARG_RUN_ID, -1);
+            if (runId != -1) {
+                mRun = mRunManager.getRun(runId);
+            }
+        }
     }
 
     @Override
