@@ -83,6 +83,18 @@ public class RunDatabaseHelper extends SQLiteOpenHelper {
         return new RunCursor(wrapped);
     }
 
+    public RunCursor queryRun(long id) {
+        Cursor wrapped = getReadableDatabase().query(TABLE_RUN,
+                null, // get all columns
+                COLUMN_RUN_ID + " = ?", // look for a run ID
+                new String[]{ String.valueOf(id) },  // with this value
+                null, // group by
+                null, // order by
+                null, // having
+                "1"); // number of rows limit
+        return new RunCursor(wrapped);
+    }
+
     /**
      * A convenience class to wrap a cursor that returns rows from the "run" table.
      * The {@link getRun()} method will give you a Run instance representing
