@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.beepscore.android.runtracker.RunDatabaseHelper.RunCursor;
@@ -71,6 +72,15 @@ public class RunListFragment extends ListFragment {
             mCursor.requery();
             ((RunCursorAdapter)getListAdapter()).notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void onListItemClick(ListView listView, View view, int position, long id) {
+        // The id argument will be the Run ID; CursorAdapter gives us this for free
+        // because we used convention of naming run table column _id
+        Intent intent = new Intent(getActivity(), RunActivity.class);
+        intent.putExtra(RunActivity.EXTRA_RUN_ID, id);
+        startActivity(intent);
     }
 
     private static class RunCursorAdapter extends CursorAdapter {
