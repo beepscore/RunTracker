@@ -20,6 +20,7 @@ import android.widget.Toast;
 public class RunFragment extends Fragment {
     private static final String TAG = "RunFragment";
     private static final String ARG_RUN_ID = "RUN_ID";
+    private static final int LOAD_RUN = 0;
 
     private RunManager mRunManager;
 
@@ -76,12 +77,14 @@ public class RunFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         mRunManager = RunManager.get(getActivity());
+
         // Check for a Run ID as an argument, and find the run
         Bundle args = getArguments();
         if (args != null) {
             long runId = args.getLong(ARG_RUN_ID, -1);
             if (runId != -1) {
-                mRun = mRunManager.getRun(runId);
+                LoaderManager loaderManager = getLoaderManager();
+                loaderManager.initLoader(LOAD_RUN, args, new RunLoaderCallbacks());
                 mLastLocation = mRunManager.getLastLocationForRun(runId);
             }
         }
