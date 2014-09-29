@@ -15,5 +15,6 @@
     <string name="gps_enabled">Gps Enabled</string>
     <string name="gps_disabled">Gps Disabled</string>
     <string name="cell_text">Run at %1$s</string>
+    <string name="new_run">New Run</string>
 
 </resources>
