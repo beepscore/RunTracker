@@ -8,6 +8,8 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
 
+import com.beepscore.android.runtracker.RunDatabaseHelper.RunCursor;
+
 /**
  * Created by stevebaker on 9/27/14.
  * RunManager is a singleton.
@@ -121,6 +123,10 @@ public class RunManager {
         Run run = new Run();
         run.setId(mDatabaseHelper.insertRun(run));
         return run;
+    }
+
+    public RunCursor queryRuns() {
+        return mDatabaseHelper.queryRuns();
     }
 
     public void insertLocation(Location location) {
