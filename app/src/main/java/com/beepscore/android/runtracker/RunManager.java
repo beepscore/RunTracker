@@ -45,7 +45,7 @@ public class RunManager {
             // Use the application context to avoid leaking activities
             sRunManager = new RunManager(context.getApplicationContext());
         }
-        return  sRunManager;
+        return sRunManager;
     }
 
     private PendingIntent getLocationPendingIntent(boolean shouldCreate) {
