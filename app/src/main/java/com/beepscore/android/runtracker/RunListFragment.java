@@ -83,6 +83,20 @@ public class RunListFragment extends ListFragment {
         startActivity(intent);
     }
 
+    private static class RunListCursorLoader extends SQLiteCursorLoader {
+
+        public RunListCursorLoader(Context context) {
+            super(context);
+        }
+
+        @Override
+        protected Cursor loadCursor() {
+            // query the list of runs
+            return RunManager.get(getContext()).queryRuns();
+        }
+
+    }
+
     private static class RunCursorAdapter extends CursorAdapter {
 
         private RunCursor mRunCursor;
