@@ -8,6 +8,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
 
+import com.beepscore.android.runtracker.RunDatabaseHelper.LocationCursor;
 import com.beepscore.android.runtracker.RunDatabaseHelper.RunCursor;
 
 /**
@@ -152,6 +153,18 @@ public class RunManager {
         } else {
             Log.e(TAG, "Location received with no tracking run; ignoring.");
         }
+    }
+
+    public Location getLastLocationForRun(long runId) {
+        Location location = null;
+        LocationCursor cursor = mDatabaseHelper.queryLastLocationForRun(runId);
+        cursor.moveToFirst();
+        // if we got a row, get a location
+        if (!cursor.isAfterLast()) {
+            location = cursor.getLocation();
+        }
+        cursor.close();
+        return location;
     }
 
 }
