@@ -164,4 +164,11 @@ public class RunManager {
         return location;
     }
 
+    /**
+     * facade method
+     */
+    public LocationCursor queryLocationsForRun(long runId) {
+        return mDatabaseHelper.queryLocationsForRun(runId);
+    }
+
 }
