@@ -2,7 +2,7 @@ package com.beepscore.android.runtracker;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.support.v4.content.AsyncTaskLoader;
+import android.content.AsyncTaskLoader;
 
 /**
  * Created by stevebaker on 9/29/14.

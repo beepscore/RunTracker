@@ -1,6 +1,6 @@
 package com.beepscore.android.runtracker;
 
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 
 
 public class RunActivity extends SingleFragmentActivity {

@@ -1,16 +1,16 @@
 package com.beepscore.android.runtracker;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.widget.FrameLayout;
 
 /**
  * Created by stevebaker on 8/10/14.
  */
 
-public abstract class SingleFragmentActivity extends FragmentActivity {
+public abstract class SingleFragmentActivity extends Activity {
     protected static final String FRAGMENT_TAG = "SingleFragmentActivity.Fragment";
 
     protected abstract Fragment createFragment();
@@ -23,7 +23,7 @@ public abstract class SingleFragmentActivity extends FragmentActivity {
         fl.setId(R.id.fragmentContainer);
         setContentView(fl);
 
-        FragmentManager manager = getSupportFragmentManager();
+        FragmentManager manager = getFragmentManager();
         Fragment fragment = manager.findFragmentById(R.id.fragmentContainer);
 
         if (fragment == null) {
