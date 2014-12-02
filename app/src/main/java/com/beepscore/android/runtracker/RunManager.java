@@ -8,9 +8,6 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
 
-import com.beepscore.android.runtracker.RunDatabaseHelper.LocationCursor;
-import com.beepscore.android.runtracker.RunDatabaseHelper.RunCursor;
-
 /**
  * Created by stevebaker on 9/27/14.
  * RunManager is a singleton.

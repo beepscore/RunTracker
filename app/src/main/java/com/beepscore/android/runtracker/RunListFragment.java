@@ -18,8 +18,6 @@ import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.beepscore.android.runtracker.RunDatabaseHelper.RunCursor;
-
 /**
  * Created by stevebaker on 9/28/14.
  */
