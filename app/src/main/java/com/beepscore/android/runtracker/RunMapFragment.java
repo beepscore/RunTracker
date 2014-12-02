@@ -74,22 +74,11 @@ public class RunMapFragment extends MapFragment
             return;
         }
 
-        // Set up an overlay on the map for this run's locations
-        // Create a polyline with all of the points
-        PolylineOptions line = new PolylineOptions();
         // LatLngBounds for use in zoom to fit
         LatLngBounds.Builder latLngBuilder = new LatLngBounds.Builder();
 
-        mLocationCursor.moveToFirst();
-        while (!mLocationCursor.isAfterLast()) {
-            Location location = mLocationCursor.getLocation();
-            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-            line.add(latLng);
-            latLngBuilder.include(latLng);
-            mLocationCursor.moveToNext();
-        }
-
-        // Add the polyline to the map
+        PolylineOptions line = locationsLine(mLocationCursor, latLngBuilder);
+        // Add the line to the map
         mGoogleMap.addPolyline(line);
 
         // Zoom map to show the track, with some padding
@@ -103,6 +92,24 @@ public class RunMapFragment extends MapFragment
         CameraUpdate movement = CameraUpdateFactory.newLatLngBounds(latLngBounds,
                 displayWidth, displayHeight, 15);
         mGoogleMap.moveCamera(movement);
+    }
+
+    /**
+     * Set up an overlay on the map for this run's locations
+     * @return a polyline with all of the points
+     */
+    private PolylineOptions locationsLine(LocationCursor locationCursor, LatLngBounds.Builder latLngBuilder) {
+        PolylineOptions line = new PolylineOptions();
+
+        locationCursor.moveToFirst();
+        while (!locationCursor.isAfterLast()) {
+            Location location = locationCursor.getLocation();
+            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            line.add(latLng);
+            latLngBuilder.include(latLng);
+            locationCursor.moveToNext();
+        }
+        return line;
     }
 
     @Override
