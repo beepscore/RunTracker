@@ -3,13 +3,21 @@ package com.beepscore.android.runtracker;
 import android.app.LoaderManager;
 import android.content.Loader;
 import android.database.Cursor;
+import android.location.Location;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 /**
  * Created by stevebaker on 12/1/14.
@@ -59,17 +67,53 @@ public class RunMapFragment extends MapFragment
         return view;
     }
 
+    private void updateUI() {
+        if (mGoogleMap == null ||
+                mLocationCursor == null) {
+            return;
+        }
+
+        // Set up an overlay on the map for this run's locations
+        // Create a polyline with all of the points
+        PolylineOptions line = new PolylineOptions();
+        // LatLngBounds for use in zoom to fit
+        LatLngBounds.Builder latLngBuilder = new LatLngBounds.Builder();
+
+        mLocationCursor.moveToFirst();
+        while (!mLocationCursor.isAfterLast()) {
+            Location location = mLocationCursor.getLocation();
+            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            line.add(latLng);
+            latLngBuilder.include(latLng);
+            mLocationCursor.moveToNext();
+        }
+
+        // Add the polyline to the map
+        mGoogleMap.addPolyline(line);
+        // Zoom map to show the track, with some padding
+        // Use current display size in pixels as a bounding box
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        // Construct a movement instruction for the map camera
+        LatLngBounds latLngBounds = latLngBuilder.build();
+        // TODO: fixme getWidth, getHeight deprecated
+        CameraUpdate movement = CameraUpdateFactory.newLatLngBounds(latLngBounds,
+                display.getWidth(), display.getHeight(), 15);
+        mGoogleMap.moveCamera(movement);
+    }
+
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         long runId = args.getLong(ARG_RUN_ID, -1);
         return new LocationListCursorLoader(getActivity(), runId);
     }
 
+    //////////////////
     // LoaderCallbacks
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         mLocationCursor = (LocationCursor)cursor;
+        updateUI();
     }
 
     @Override
@@ -78,5 +122,7 @@ public class RunMapFragment extends MapFragment
         mLocationCursor.close();
         mLocationCursor = null;
     }
+
+    //////////////////
 
 }
