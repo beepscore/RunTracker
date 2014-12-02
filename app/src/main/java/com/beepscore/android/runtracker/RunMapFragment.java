@@ -5,6 +5,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -90,14 +91,17 @@ public class RunMapFragment extends MapFragment
 
         // Add the polyline to the map
         mGoogleMap.addPolyline(line);
+
         // Zoom map to show the track, with some padding
-        // Use current display size in pixels as a bounding box
-        Display display = getActivity().getWindowManager().getDefaultDisplay();
         // Construct a movement instruction for the map camera
         LatLngBounds latLngBounds = latLngBuilder.build();
-        // TODO: fixme getWidth, getHeight deprecated
+
+        // Use current display size in pixels as a bounding box
+        DisplayMetrics metrics = getActivity().getResources().getDisplayMetrics();
+        int displayWidth = metrics.widthPixels;
+        int displayHeight = metrics.heightPixels;
         CameraUpdate movement = CameraUpdateFactory.newLatLngBounds(latLngBounds,
-                display.getWidth(), display.getHeight(), 15);
+                displayWidth, displayHeight, 15);
         mGoogleMap.moveCamera(movement);
     }
 
