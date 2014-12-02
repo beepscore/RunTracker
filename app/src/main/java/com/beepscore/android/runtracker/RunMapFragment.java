@@ -2,6 +2,7 @@ package com.beepscore.android.runtracker;
 
 import android.app.LoaderManager;
 import android.content.Loader;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.location.Location;
 import android.os.Bundle;
@@ -17,8 +18,12 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+
+import java.util.Date;
 
 /**
  * Created by stevebaker on 12/1/14.
@@ -105,6 +110,26 @@ public class RunMapFragment extends MapFragment
         while (!locationCursor.isAfterLast()) {
             Location location = locationCursor.getLocation();
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+
+            Resources resources = getResources();
+
+            if (locationCursor.isFirst()) {
+                String startDateString = new Date(location.getTime()).toString();
+                MarkerOptions startMarkerOptions = new MarkerOptions()
+                        .position(latLng)
+                        .title(resources.getString(R.string.run_start))
+                        .snippet(resources.getString(R.string.run_started_at_format, startDateString));
+                mGoogleMap.addMarker(startMarkerOptions);
+            } else if (locationCursor.isLast()) {
+                // else so skip if only one location
+                String finishDateString = new Date(location.getTime()).toString();
+                MarkerOptions finishMarkerOptions = new MarkerOptions()
+                        .position(latLng)
+                        .title(resources.getString(R.string.run_finish))
+                        .snippet(resources.getString(R.string.run_finished_at_format, finishDateString));
+                mGoogleMap.addMarker(finishMarkerOptions);
+            }
+
             line.add(latLng);
             latLngBuilder.include(latLng);
             locationCursor.moveToNext();
